@@ -12,7 +12,4 @@
 */.DS_Store
 .DS_Store
 
-# Maven
-log/
-target/
-bin/
+
