@@ -13,8 +13,8 @@ public class BruteForceMethod {
 	private double rc;
 	private double l;
 
-	public BruteForceMethod(List<Particle> particles, double l,
-			double rc, boolean periodicBounds) {
+	public BruteForceMethod(List<Particle> particles, double l, double rc,
+			boolean periodicBounds) {
 		this.rc = rc;
 		this.l = l;
 		this.periodicBounds = periodicBounds;
@@ -23,9 +23,9 @@ public class BruteForceMethod {
 	}
 
 	private void fillNeighbours(List<Particle> particles) {
-		for(Particle p : particles){
-			for(Particle q : particles){
-				MaybeAddNeighbour(p, q);
+		for (int i = 0; i < particles.size(); i++) {
+			for (int j = i + 1; j < particles.size(); j++) {
+				MaybeAddNeighbour(particles.get(i), particles.get(j));
 			}
 		}
 	}
