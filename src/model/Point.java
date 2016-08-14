@@ -22,6 +22,10 @@ public class Point {
 		return "("+x+", "+y+")";
 	}
 	
+	public Point clone() {
+		return new Point(x, y);
+	}
+	
 	static public Point sum(Point p1, Point p2){
 		return new Point(p1.x+p2.x, p1.y+p2.y);
 	}

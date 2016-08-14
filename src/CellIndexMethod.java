@@ -14,9 +14,11 @@ public class CellIndexMethod {
 	private Map<Particle, Set<Particle>> neighbours;
 	private boolean periodicBounds;
 	private double rc;
+	private double l;
 
 	public CellIndexMethod(List<Particle> particles, double l, int m, double rc, boolean periodicBounds) {
 		cellLength = l / m;
+		this.l = l;
 		this.periodicBounds = periodicBounds;
 		this.rc = rc;
 		if (!validProperties(particles, l, m, rc)) {
@@ -32,47 +34,64 @@ public class CellIndexMethod {
 			neighbours.put(p, new HashSet<Particle>());
 		}
 		int m = matrix.length;
-		for (int i = 1; i < m - 1; i++) {
-			for (int j = 0; j < m - 1; j++) {
-				Set<Particle> particlesInCell = matrix[i][j];
+		for (int x = 0; x < m; x++) {
+			for (int y = 0; y < m; y++) {
+				Set<Particle> particlesInCell = matrix[x][y];
 				for (Particle p : particlesInCell) {
 					int[] dx = { 0, 0, 1, 1, 1 };
 					int[] dy = { 0, 1, 1, 0, -1 };
 					for (int k = 0; k < 5; k++) {
-						for (Particle q : matrix[i + dy[k]][j + dx[k]]) {
+						int xx = x + dx[k];
+						int yy = y + dy[k];
+						if (!periodicBounds) {
+							if (xx >= m || yy < 0 || yy >= m) {
+								continue;
+							}
+						}
+						xx = (xx + m) % m;
+						yy = (yy + m) % m;
+						for (Particle q : matrix[xx][yy]) {
 							addNeighbour(p, q);
 						}
 					}
 				}
 			}
 		}
-		// i = 0
-		for (int j = 0; j < m - 1; j++) {
-			Set<Particle> particlesInCell = matrix[0][j];
-			for (Particle p : particlesInCell) {
-				int[] dx = { 0, 0, 1, 1, 1 };
-				int[] dy = { 0, 1, 1, 0, -1 };
-				for (int k = 0; k < 4; k++) {
-					for (Particle q : matrix[dy[k]][j + dx[k]]) {
-						addNeighbour(p, q);
-					}
-				}
-				if (periodicBounds) {
-					for (Particle q : matrix[dy[4]][(j + dx[4])%m]) {
-						addNeighbour(p, q);
-					}
-				}
-			}
-		}
-		// i = m-1
-		// j = m-1
-		// i = m-1 & j = m-1
+
 	}
 
 	private void addNeighbour(Particle p, Particle q) {
-		double dist2 = Point.dist2(p.getPoint(), q.getPoint());
+		if (p.equals(q)) {
+			return;
+		}
+		
+		Point pp = p.getPoint().clone();
+		Point qq = q.getPoint().clone();
+		
+		if (periodicBounds) {
+			int m = matrix.length;
+			
+			if (pp.x < qq.x && pp.x + 2*cellLength < qq.x) {
+				pp.x += l;
+			}
+			
+			if (qq.x < pp.x && qq.x + 2*cellLength < pp.x) {
+				qq.x += l;
+			}
+			
+			if (pp.y < qq.y && pp.y + 2*cellLength < qq.y) {
+				pp.y += l;
+			}
+			
+			if (qq.y < pp.y && qq.y + 2*cellLength < pp.y) {
+				qq.y += l;
+			}
+		}
+		
+		double dist2 = Point.dist2(pp, qq);
 		double r = rc + p.getRadius() + q.getRadius();
-		if (!p.equals(q) && dist2 < r * r) {
+		
+		if (dist2 < r * r) {
 			neighbours.get(p).add(q);
 			neighbours.get(q).add(p);
 		}
