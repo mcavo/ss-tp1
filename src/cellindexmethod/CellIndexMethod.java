@@ -1,3 +1,4 @@
+package cellindexmethod;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,8 +16,10 @@ public class CellIndexMethod {
 	private boolean periodicBounds;
 	private double rc;
 	private double l;
+	private long time;
 
 	public CellIndexMethod(List<Particle> particles, double l, int m, double rc, boolean periodicBounds) {
+		long start = System.currentTimeMillis();
 		cellLength = l / m;
 		this.l = l;
 		this.periodicBounds = periodicBounds;
@@ -26,6 +29,27 @@ public class CellIndexMethod {
 		}
 		fillMatrix(particles, m);
 		fillNeighbours(particles);
+		time = System.currentTimeMillis() - start;
+	}
+
+	public long getTime() {
+		return time;
+	}
+
+	public Set<Particle>[][] getMatrix() {
+		return matrix;
+	}
+
+	public boolean isPeriodicBounds() {
+		return periodicBounds;
+	}
+
+	public double getRc() {
+		return rc;
+	}
+
+	public double getL() {
+		return l;
 	}
 
 	private void fillNeighbours(List<Particle> particles) {
