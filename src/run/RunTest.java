@@ -10,11 +10,11 @@ import model.Particle;
 import model.Point;
 import utils.XYZFilesGenerator;
 
-public class Run {
+public class RunTest {
 	
 	public static void main(String[] args) {
 		
-		double l = 20; double r = 0.25, rc = 1; boolean periodicBounds = false; int n = 1000, seed = 6;
+		double l = 20; double r = 0.25, rc = 1; boolean periodicBounds = false; int n = 1200, seed = 3;
 		List<Particle> particles = generateRandomExample(l, r, periodicBounds, n, seed);
 		System.out.println("Cell Index Method:");
 		double accumulate = 0;
@@ -22,7 +22,7 @@ public class Run {
 		for(int m = 1 ; m<=13 ; m++) {
 			accumulate = 0;
 			for(count=0 ; count<50 ; count++) {
-				CellIndexMethod cim = new CellIndexMethod(new ArrayList<Particle>(particles), l, m, rc, periodicBounds);
+				CellIndexMethod cim = new CellIndexMethod(particles, l, m, rc, periodicBounds);
 				accumulate += cim.getTime();
 			}
 			System.out.println("M = " + m + ": " + (accumulate/count) + "ms");
@@ -31,7 +31,7 @@ public class Run {
 		System.out.println("\n\nBrute Force Method:");
 		accumulate = 0;
 		for(count=0 ; count<50 ; count++) {
-			BruteForceMethod bfm = new BruteForceMethod(new ArrayList<Particle>(particles), l, rc, periodicBounds);
+			BruteForceMethod bfm = new BruteForceMethod(particles, l, rc, periodicBounds);
 			accumulate += bfm.getTime();
 		}
 		System.out.println("Time: " + (accumulate/count) + "ms");
