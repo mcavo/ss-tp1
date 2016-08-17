@@ -26,16 +26,16 @@ public class XYZFilesGenerator {
 		List<String> header = getNeighboursHeader(cim.getNeighbours().size());
 		List<String> lines = new ArrayList<>(header);
 		addBasicBody(cim, lines);
-		writeFile(outputPath + "/basic.xyz", lines);
+		writeFile(outputPath + "basic.xyz", lines);
 
-//		for (Map.Entry<Particle, Set<Particle>> entry : cim.getNeighbours().entrySet()) {
-//			lines.clear();
-//			lines.addAll(header);
-//
-//			addShowNeighboursBody(entry, cim, lines);
-//
-//			writeFile(outputPath + "/id_" + entry.getKey().getId() + ".xyz", lines);
-//		}
+		for (Map.Entry<Particle, Set<Particle>> entry : cim.getNeighbours().entrySet()) {
+			lines.clear();
+			lines.addAll(header);
+
+			addShowNeighboursBody(entry, cim, lines);
+
+			writeFile(outputPath + "id_" + entry.getKey().getId() + ".xyz", lines);
+		}
 	}
 
 	private static void addShowNeighboursBody(Entry<Particle, Set<Particle>> p, CellIndexMethod cim,
