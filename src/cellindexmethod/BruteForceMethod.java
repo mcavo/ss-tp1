@@ -1,4 +1,6 @@
+package cellindexmethod;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +21,9 @@ public class BruteForceMethod {
 		this.l = l;
 		this.periodicBounds = periodicBounds;
 		neighbours = new HashMap<Particle, Set<Particle>>();
+		for (Particle p : particles) {
+			neighbours.put(p, new HashSet<Particle>());
+		}
 		fillNeighbours(particles);
 	}
 

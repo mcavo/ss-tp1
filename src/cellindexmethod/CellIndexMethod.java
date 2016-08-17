@@ -1,3 +1,5 @@
+package cellindexmethod;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +28,22 @@ public class CellIndexMethod {
 		}
 		fillMatrix(particles, m);
 		fillNeighbours(particles);
+	}
+
+	public Set<Particle>[][] getMatrix() {
+		return matrix;
+	}
+
+	public boolean isPeriodicBounds() {
+		return periodicBounds;
+	}
+
+	public double getRc() {
+		return rc;
+	}
+
+	public double getL() {
+		return l;
 	}
 
 	private void fillNeighbours(List<Particle> particles) {
@@ -64,39 +82,39 @@ public class CellIndexMethod {
 		if (p.equals(q)) {
 			return;
 		}
-		
+
 		Point pp = p.getPoint().clone();
 		Point qq = q.getPoint().clone();
-		
+
 		if (periodicBounds) {
-			int m = matrix.length;
-			
-			if (pp.x < qq.x && pp.x + 2*cellLength < qq.x) {
+
+			if (pp.x < qq.x && pp.x + 2 * cellLength < qq.x) {
 				pp.x += l;
 			}
-			
-			if (qq.x < pp.x && qq.x + 2*cellLength < pp.x) {
+
+			if (qq.x < pp.x && qq.x + 2 * cellLength < pp.x) {
 				qq.x += l;
 			}
-			
-			if (pp.y < qq.y && pp.y + 2*cellLength < qq.y) {
+
+			if (pp.y < qq.y && pp.y + 2 * cellLength < qq.y) {
 				pp.y += l;
 			}
-			
-			if (qq.y < pp.y && qq.y + 2*cellLength < pp.y) {
+
+			if (qq.y < pp.y && qq.y + 2 * cellLength < pp.y) {
 				qq.y += l;
 			}
 		}
-		
+
 		double dist2 = Point.dist2(pp, qq);
 		double r = rc + p.getRadius() + q.getRadius();
-		
+
 		if (dist2 < r * r) {
 			neighbours.get(p).add(q);
 			neighbours.get(q).add(p);
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void fillMatrix(List<Particle> particles, int m) {
 		matrix = new Set[m][m];
 		for (int i = 0; i < m; i++) {
