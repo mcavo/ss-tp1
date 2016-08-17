@@ -8,7 +8,7 @@ import cellindexmethod.BruteForceMethod;
 import cellindexmethod.CellIndexMethod;
 import model.Particle;
 import model.Point;
-import utils.XYZFilesGenerator;
+import utils.Timer;
 
 public class RunTest {
 	
@@ -19,11 +19,14 @@ public class RunTest {
 		System.out.println("Cell Index Method:");
 		double accumulate = 0;
 		int count = 0;
+		Timer timer = new Timer();
 		for(int m = 1 ; m<=13 ; m++) {
 			accumulate = 0;
 			for(count=0 ; count<50 ; count++) {
-				CellIndexMethod cim = new CellIndexMethod(particles, l, m, rc, periodicBounds);
-				accumulate += cim.getTime();
+				timer.start();
+				new CellIndexMethod(particles, l, m, rc, periodicBounds);
+				timer.stop();
+				accumulate += timer.getTime();
 			}
 			System.out.println("M = " + m + ": " + (accumulate/count) + "ms");
 		}
@@ -31,8 +34,10 @@ public class RunTest {
 		System.out.println("\n\nBrute Force Method:");
 		accumulate = 0;
 		for(count=0 ; count<50 ; count++) {
-			BruteForceMethod bfm = new BruteForceMethod(particles, l, rc, periodicBounds);
-			accumulate += bfm.getTime();
+			timer.start();
+			new BruteForceMethod(particles, l, rc, periodicBounds);
+			timer.stop();
+			accumulate += timer.getTime();
 		}
 		System.out.println("Time: " + (accumulate/count) + "ms");
 		//XYZFilesGenerator.showNeighbours("output/example1", cim);

@@ -16,6 +16,7 @@ import java.util.Set;
 import cellindexmethod.CellIndexMethod;
 import model.Particle;
 import model.Point;
+import utils.Timer;
 import utils.XYZFilesGenerator;
 
 public class Run {
@@ -70,14 +71,17 @@ public class Run {
 		}
 		
 		try {
+			Timer timer = new Timer();
 			List<Particle> particles = generateRandomExample(l, r, periodicBounds, n, seed);
+			timer.start();
 			CellIndexMethod cim = new CellIndexMethod(particles, l, m, rc, periodicBounds);
+			timer.stop();
 			
-			if (dirPath != null) {
+			if (generateXYZ) {
 				XYZFilesGenerator.showNeighbours(dirPath, cim);
 			}
 			
-			writeFile(dirPath, cim);
+			writeFile(dirPath, cim, timer);
 			
 			
 		} catch (Exception e) {
@@ -149,11 +153,11 @@ public class Run {
 		return true;
 	}
 	
-	private static void writeFile(String path, CellIndexMethod cim) {
+	private static void writeFile(String path, CellIndexMethod cim, Timer timer) {
 		Path file = Paths.get(path + "output.txt");
 		List<String> lines = new ArrayList<>();
 		
-		lines.add("Time: " + cim.getTime() + " ms");
+		lines.add("Time: " + timer.getTime() + " ms");
 		lines.add("Output:");
 		for(Entry<Particle, Set<Particle>> entry : cim.getNeighbours().entrySet()) {
 			StringBuffer s = new StringBuffer(entry.getKey().getId() + ": [ ");

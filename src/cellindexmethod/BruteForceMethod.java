@@ -14,11 +14,9 @@ public class BruteForceMethod {
 	private boolean periodicBounds;
 	private double rc;
 	private double l;
-	private long time;
 
 	public BruteForceMethod(List<Particle> particles, double l, double rc,
 			boolean periodicBounds) {
-		long start = System.currentTimeMillis();
 		this.rc = rc;
 		this.l = l;
 		this.periodicBounds = periodicBounds;
@@ -27,11 +25,6 @@ public class BruteForceMethod {
 			neighbours.put(p, new HashSet<Particle>());
 		}
 		fillNeighbours(particles);
-		time = System.currentTimeMillis() - start;
-	}
-
-	public long getTime() {
-		return time;
 	}
 
 	private void fillNeighbours(List<Particle> particles) {
